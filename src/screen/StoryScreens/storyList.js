@@ -9,17 +9,16 @@ import {Card} from 'react-native-paper';
 import {storyLoader} from "../../action/story";
 
 
-const StoryList = ({storyType, changed, setChanged}) => {
+const StoryList = ({storyType, changed, setChanged, setStoryId, setOnClickStory}) => {
     const [list, setList] = useState([]);
     const [loading, setLoading] = useState(false);
     const init = useRef(true);
-    const [storyId, setStoryId] = useState("");
     const [clickedStory, setClickedStory] = useState(false);
 
     const LoadHandler = () => {
         const loadInit = async () => {
             setLoading(true);
-            const initData = await axios.get(`http://192.168.0.59:3000/story/list/1?type=${storyType}`)
+            const initData = await axios.get(`http://121.144.131.216:3000/story/list/1?type=${storyType}`)
             setList(initData.data.list);
         }
 
@@ -31,8 +30,6 @@ const StoryList = ({storyType, changed, setChanged}) => {
         }, [])
         return null;
     }
-
-
     useEffect(() => {
         if (changed) {
             setChanged(false)
@@ -49,8 +46,10 @@ const StoryList = ({storyType, changed, setChanged}) => {
                         <Text>
                             {story.story_title}
                         </Text>
-                        <TouchableOpacity onPress={() => setStoryId(story.id)
-                        }>
+                        <TouchableOpacity onPress={() => {
+                            setStoryId(story.id)
+                            setOnClickStory(true)
+                        }}>
                             <Card>
                                 <Card.Cover source={{
                                     uri: story.Story_Files[0].file
